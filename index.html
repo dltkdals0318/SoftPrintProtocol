@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soft Print Protocol</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://use.typekit.net/odb0ykk.css">
+</head>
+<body>
+<h1 id="title" onclick="window.location.href='index.html'">Soft Print Protocol.</h1>
+<p id="subtitle">click the button to print.</p>
+<div class="control-buttons" id="controlButtons">
+    <button class="control-btn" data-target="medical">Medical</button>
+    <button class="control-btn" data-target="mathmatics">mathmatics</button>
+    <button class="control-btn" data-target="retrograde">Retrograde</button>
+</div>
+
+<!-- 다운로드 버튼 -->
+<button class="download-btn" id="downloadBtn">Download</button>
+
+<!-- 프린팅 사운드 -->
+<audio id="printingSound" preload="auto" loop>
+    <source src="printing.mp3" type="audio/wav">
+    printing...
+</audio>
+
+<!-- 배경 이미지 (가장 뒤, 메인페이지에서 보임) -->
+<div class="background-image-container" id="backgroundImage">
+    <div class="background-image-wrapper">
+        <img src="original.png" alt="Background" class="background-img">
+    </div>
+</div>
+
+<!-- 프린터 이미지 (화면 정중앙, 최상위) -->
+<div class="printer-container">
+    <img src="printer.png" alt="Printer" class="printer-img" width="300px">
+</div>
+
+<!-- 프린터 top -->
+<div class="printer-container-top">
+    <img src="printer_top.png" alt="Printer" class="printer-img" width="300px">
+</div>
+
+<!-- Medical 비디오 -->
+<div class="media-container" id="medical">
+    <video autoplay loop muted playsinline webkit-playsinline>
+        <source src="final image/medical.mp4" type="video/mp4">
+        loading...
+    </video>
+</div>
+
+<!-- mathmatics 비디오 -->
+<div class="media-container" id="mathmatics">
+    <video autoplay loop muted playsinline webkit-playsinline>
+        <source src="final image/mathmatics.mp4" type="video/mp4">
+        loading...
+    </video>
+</div>
+
+<!-- Retrograde 이미지 -->
+<div class="media-container" id="retrograde">
+    <img src="final image/retrograde.png" alt="Retrograde" class="media-img">
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

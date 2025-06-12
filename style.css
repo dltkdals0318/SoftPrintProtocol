@@ -1,0 +1,517 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: url('hand.png') 1 1, auto;
+}
+
+@font-face {
+font-family:"andale-mono-mt-pro";
+src:url("https://use.typekit.net/af/e3600e/0000000000000000775a87ce/31/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("woff2"),url("https://use.typekit.net/af/e3600e/0000000000000000775a87ce/31/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("woff"),url("https://use.typekit.net/af/e3600e/0000000000000000775a87ce/31/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("opentype");
+font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
+}
+
+body {
+    font-family: "andale-mono-mt-pro",sans-serif;
+    background-color: white;
+    min-height: 100vh;
+    position: relative;
+}
+
+#title {
+    text-align: center;
+    padding-top: 8vh;
+    font-size: clamp(24px, 5vw, 32px);
+    cursor: url('hand.png') 1 1, auto;
+    transition: color 0.2s ease;
+    color: black;
+}
+
+#subtitle {
+    text-align: center;
+    padding-top: 2.5vh;
+    font-size: clamp(16px, 1vw, 16px);
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(119, 119, 119);
+}
+
+#title:hover {
+    color: #396eca;
+}
+
+/* 컨트롤 버튼들 */
+.control-buttons {
+    position: fixed;
+    top: 50%;
+    left: 51%;
+    transform: translate(-50%, -50%) translateX(220px) translateY(40px);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background-color: transparent;
+    border: none;
+    padding: 8px;
+    border-radius: 0;
+    transition: opacity 0.3s ease;
+}
+
+.control-buttons.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.control-btn {
+    padding: 8px 14px;
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    cursor: url('hand.png') 1 1, auto;
+    font-size: 11px;
+    font-weight: 500;
+    min-width: 75px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    text-align: center;
+    font-family: "andale-mono-mt-pro",sans-serif;
+}
+
+.control-btn:hover:not(.disabled) {
+    background-color: #e8e8e8;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.control-btn.active {
+    background-color: #333;
+    color: white;
+    border-color: #222;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+}
+
+.control-btn.active:hover {
+    background-color: #111;
+}
+
+.control-btn.disabled {
+    background-color: #fafafa;
+    color: #999;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* 배경 이미지 - 가장 뒤쪽, 메인페이지에서 보임 */
+.background-image-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1003;
+    background-color: transparent;
+    transform: translate(-50%, -50%) translateY(-196px);
+}
+
+.background-image-wrapper {
+    width: 396.5px;
+    height: 230px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.background-img {
+    max-width: 396.5px;
+    max-height: 295.5px;
+    height: auto;
+    margin-left: 2px;
+    transition: transform 0.3s ease-out;
+}
+
+/* 버튼 클릭 시 이미지가 아래로 슬라이드되는 애니메이션 */
+.background-image-container.slide-away .background-img {
+    animation: imageSlideDown 5.5s ease-out forwards;
+}
+
+@keyframes imageSlideDown {
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(350px);
+    }
+}
+
+/* 프린터 이미지 - 화면 정중앙에 배치 (최하위) */
+.printer-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(40px);
+    z-index: 100;
+    pointer-events: none;
+}
+
+.printer-img {
+    width: 300px;
+    height: auto;
+    opacity: 1;
+}
+
+.printer-container-top{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(40px);
+    z-index: 300;
+    pointer-events: none;
+}
+
+/* 미디어 컨테이너 (중간 레이어, 투명 배경) */
+.media-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    background-color: transparent;
+    transform: translateY(90px);
+}
+
+.media-container.active {
+    display: flex;
+    animation: slideDown 3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-165px);
+    }
+    to {
+        transform: translateY(90px);
+    }
+}
+
+/* 비디오 스타일 */
+video {
+    width: 395px;
+    height: 295px;
+    margin-left: 2px;
+}
+
+/* 이미지 스타일 */
+.media-img {
+    max-width: 395px;
+    max-height: 295px;
+    height: auto;
+    margin-left: 2px;
+}
+
+/* 다운로드 버튼 */
+.download-btn {
+    font-family: "andale-mono-mt-pro",sans-serif;
+    position: fixed;
+    bottom: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 18px;
+    font-size: 14.5px;
+    z-index: 1001;
+    display: none;
+    transition: opacity 0.3s ease;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: url('hand.png') 1 1, auto;
+}
+
+.download-btn.show {
+    display: block;
+}
+
+.download-btn.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.download-btn:hover:not(.disabled) {
+    background-color: #222;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    #title {
+        font-size: clamp(29px, 4vw, 29px);
+        padding-top: 9vh;
+    }
+
+    .media-container.active {
+    animation: slideDownTablet 2.9s ease-out;
+}
+
+@keyframes slideDownTablet {
+    from {
+        transform: translateY(-170px);  /* 태블릿용 시작점 */
+    }
+    to {
+        transform: translateY(90px);
+    }
+}
+    
+    .control-buttons {
+    top: 50%;
+    left: 50%;
+    }
+    
+    .control-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+        min-width: 80px;
+    }
+    
+    .download-btn {
+        bottom: 60px;
+        left: 50%;
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    .background-image-container {
+        transform: translate(-50%, -50%) translateY(-190px);
+    }
+    
+    /* 태블릿용 애니메이션 속도 조절 */
+    .background-image-container.slide-away .background-img {
+        animation: imageSlideDown 5s ease-out forwards;
+    }
+    
+    .printer-img {
+        width: 285px;
+    }
+    
+    .background-image-wrapper {
+        width: 369.5px;
+        height: 230px;
+    }
+    
+    .background-img {
+        max-width: 369.5px;
+        max-height: 275.5px;
+        height: auto;
+        margin-left: 2px;
+    }
+    
+    video {
+        width: 368px;
+        height: 274px;
+        margin-left: 2px;
+    }
+    
+    .media-img {
+        max-width: 368px;
+        max-height: 274px;
+        height: auto;
+        margin-left: 2px;
+    }
+}
+
+@media (max-width: 480px) {
+    #title {
+        font-size: clamp(26px, 4vw, 26px);
+        padding-top: 9vh;
+    }
+    
+    .media-container.active {
+    animation: slideDownTablet 2.75s ease-out;
+}
+
+@keyframes slideDownTablet {
+    from {
+        transform: translateY(-155px);  /* 태블릿용 시작점 */
+    }
+    to {
+        transform: translateY(90px);
+    }
+}
+
+    .control-buttons {
+        top: 45%;
+        left: 29%;
+    }
+    
+    .control-btn {
+        padding: 5px;
+        font-size: 9px;
+        min-width: 40px;
+    }
+    
+    .download-btn {
+        bottom: 65px;
+        left: 50%;
+        padding: 6px 14px;
+        font-size: 13px;
+    }
+    
+    .background-image-container {
+        transform: translate(-50%, -50%) translateY(-172px);
+    }
+    
+    /* 모바일용 애니메이션 속도 조절 */
+    .background-image-container.slide-away .background-img {
+        animation: imageSlideDown 4.8s ease-out forwards;
+    }
+    
+    .printer-img {
+        width: 240px;
+    }
+    
+    .background-image-wrapper {
+        width: 313.5px;
+        height: 230px;
+    }
+    
+    .background-img {
+        max-width: 313.5px;
+        max-height: 233.5px;
+        height: auto;
+        margin-left: 2px;
+    }
+    
+    video {
+        width: 313px;
+        height: 233px;
+        margin-left: 2px;
+    }
+    
+    .media-img {
+        max-width: 313px;
+        max-height: 233px;
+        height: auto;
+        margin-left: 2px;
+    }
+}
+
+/* UHD TV용 (2560px 이상 - 4K 디스플레이) */
+@media (min-width: 2560px) {
+    #title {
+        font-size: clamp(80px, 8vw, 80px);
+        padding-top: 10vh;
+        font-weight: 500;
+    }
+
+    #subtitle {
+        font-size: clamp(35px, 2vw, 35px);
+        padding-top: 1.5vh;
+    }
+
+    .control-buttons {
+        transform: translate(-20%, -50%) translateX(500px) translateY(80px);
+        gap: 40px;
+        padding: 20px;
+    }
+
+    .control-btn {
+        padding: 20px 35px;
+        font-size: 35px;
+        min-width: 140px;
+        border-radius: 25px;
+        font-weight: 600;
+    }
+
+    .background-image-container {
+        transform: translate(-50%, -50%) translateY(-580px);
+    }
+
+    .background-image-wrapper {
+        width: 900px;
+        height: 700px;
+    }
+
+    .background-img {
+        max-width: 1020px;
+        max-height: 790px;
+        margin-left: 6px;
+    }
+
+    .printer-img {
+        width: 800px;
+    }
+
+    .printer-container {
+        transform: translate(-50%, -50%) translateY(90px);
+    }
+
+    .printer-container-top {
+        transform: translate(-50%, -50%) translateY(90px);
+    }
+
+    .media-container {
+        transform: translateY(320px);
+    }
+
+    .media-container.active {
+        animation: slideDownTV 5s ease-out;
+    }
+
+    @keyframes slideDownTV {
+        from {
+            transform: translateY(-360px);
+        }
+        to {
+            transform: translateY(320px);
+        }
+    }
+
+    @keyframes imageSlideDown {
+        from {
+            transform: translateY(0px);
+        }
+        to {
+            transform: translateY(710px);
+        }
+    }
+
+    video {
+        width: 600px;
+        height: 780px;
+        margin-left: 6px;
+    }
+
+    .media-img {
+        max-width: 1000px;
+        max-height: 800px;
+        margin-left: 6px;
+    }
+
+    .download-btn {
+        bottom: 200px;
+        padding: 18px 35px;
+        font-size: 35px;
+        border-radius: 8px;
+        font-weight: 600;
+        position: fixed;
+        transition: background-color 0.3s ease;
+    }
+
+    /* TV에서 더 명확한 호버 효과 */
+    .control-btn:hover:not(.disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    .download-btn:hover:not(.disabled) {
+        background-color: #222;
+    }
+
+    .download-btn:active {
+        transform: none;
+    }
+}
